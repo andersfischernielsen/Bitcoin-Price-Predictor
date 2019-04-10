@@ -1,4 +1,4 @@
-# Bitcoin-Price-Predictor-COMP809
+# Bitcoin Price Predictor
 A project in COMP809 at Auckland University of Technology attempting to predict bitcoin prices using a LSTM RNN.
 
 The dataset (found in D1.csv) has the format:
