@@ -19,9 +19,9 @@ scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
 scaled = scaler.fit_transform(values)
 
 # Train on the first year of data
-split_train, split_test = int(values.shape[0]*0.9), int(values.shape[0]*0.1)
-train = values[:split_train, :]
-test = values[split_test:, :]
+split = int(values.shape[0]*0.9)
+train = values[:split, :]
+test = values[split:, :]
 
 # Split data into test and training
 train_X, train_y = train[:, :-1], train[:, -1]
@@ -42,18 +42,13 @@ model.add(Dense(1))
 model.compile(loss='mean_squared_error', optimizer='rmsprop')
 
 # Fit network
-history = model.fit(train_X, train_y, epochs=100, batch_size=24,
-                    validation_data=(test_X, test_y), verbose=2, shuffle=False)
-
-# Plot history
-# plt.plot(history.history['loss'], label='train')
-# plt.plot(history.history['val_loss'], label='test')
-# plt.legend()
-# plt.show()
+history = model.fit(train_X, train_y, epochs=10, batch_size=24,
+                    validation_data=(test_X, test_y), shuffle=False)
 
 # Make a prediction
 predict = model.predict(test_X, batch_size=24)
 
-plt.plot(predict[:, -1])
-plt.plot(test_y)
+plt.plot(predict[:, -1], label='predict')
+plt.plot(test_y, label='actual')
+plt.legend()
 plt.show()
