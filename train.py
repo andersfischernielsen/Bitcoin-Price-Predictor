@@ -46,7 +46,7 @@ model.add(Dense(1))
 model.compile(loss='mean_squared_logarithmic_error', optimizer='adam')
 
 # Fit network
-history = model.fit(train_X, train_y, epochs=10, batch_size=24,
+history = model.fit(train_X, train_y, epochs=20, batch_size=24,
                     validation_data=(test_X, test_y), shuffle=False)
 
 # Plot loss history
