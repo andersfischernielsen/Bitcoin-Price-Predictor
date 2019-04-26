@@ -14,16 +14,17 @@ data = read_csv("D1.csv", header=0, index_col=0, skiprows=14)
 values = data.values
 values = values.astype('float64')
 
-# Scale inputs
-scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
-scaled = scaler.fit_transform(values)
-values = scaled
-
-# Train on the first year of data
+# Split data into test, train and validation with validation as most recent data
 split = int(values.shape[0]*0.1)
 train = values[:split*8, :]
 test = values[split*8:split*9, :]
 val = values[split*9:split*10, :]
+
+# Scale data
+scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
+train = scaler.fit_transform(train)
+test = scaler.fit_transform(test)
+val = scaler.fit_transform(val)
 
 # Split data into test and training
 train_X, train_y = train[:, :-1], train[:, -1]
