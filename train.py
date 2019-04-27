@@ -42,19 +42,19 @@ print(train_X.shape, train_y.shape, val_X.shape, val_y.shape)
 
 # Instantiate model
 model = Sequential()
-model.add(LSTM(100, input_shape=(train_X.shape[1], train_X.shape[2])))
+model.add(LSTM(1, input_shape=(train_X.shape[1], train_X.shape[2])))
 model.add(Dense(1))
 model.compile(loss='mean_squared_logarithmic_error', optimizer='adam')
 
 # Fit network
-history = model.fit(train_X, train_y, epochs=50, batch_size=24,
-                    validation_data=(val_X, val_y), shuffle=False)
+history = model.fit(train_X, train_y, epochs=32, batch_size=24,
+                    validation_data=(val_X, val_y), shuffle=True)
 
 # Plot loss history
-# plt.plot(history.history['loss'], label='train')
-# plt.plot(history.history['val_loss'], label='test')
-# plt.legend()
-# plt.show()
+plt.plot(history.history['loss'], label='train_loss')
+plt.plot(history.history['val_loss'], label='val_loss')
+plt.legend()
+plt.show()
 
 # Make a prediction
 predict = model.predict(test_X, batch_size=24)
