@@ -6,8 +6,7 @@ from pandas import concat
 from sklearn import preprocessing
 
 from keras.models import Sequential
-from keras.layers import LSTM
-from keras.layers import Dense
+from keras.layers import LSTM, Dense, Dropout
 
 # Read
 data = read_csv("D1.csv", header=0, index_col=0, skiprows=14)
@@ -44,12 +43,13 @@ print(train_X.shape, train_y.shape, val_X.shape, val_y.shape)
 model = Sequential()
 units = int(train_X.shape[0]/10)
 model.add(LSTM(units, input_shape=(train_X.shape[1], train_X.shape[2])))
+model.add(Dropout(0.1))
 model.add(Dense(1))
-model.compile(loss='mean_squared_logarithmic_error', optimizer='adam')
+model.compile(loss='mean_squared_error', optimizer='adam')
 
 # Fit network
 history = model.fit(train_X, train_y, epochs=16, batch_size=24,
-                    validation_data=(val_X, val_y), shuffle=True)
+                    validation_data=(val_X, val_y), shuffle='batch')
 
 # Plot loss history
 plt.plot(history.history['loss'], label='train_loss')
