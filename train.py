@@ -10,8 +10,7 @@ from keras.layers import LSTM, Dense, Dropout
 
 # Read
 data = read_csv("D1.csv", header=0, index_col=0, skiprows=14)
-values = data.values
-values = values.astype('float64')
+values = data.values.astype('float64')
 
 # Split data into test, train and validation with validation as most recent data
 split = int(values.shape[0]*0.1)
