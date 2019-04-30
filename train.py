@@ -1,4 +1,5 @@
-import matplotlib.pyplot as plt
+from numpy import sqrt
+
 from pandas import read_csv
 from pandas import DataFrame
 from pandas import concat
@@ -12,6 +13,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 from keras import backend as K
 
+import matplotlib.pyplot as plt
 
 # Read
 data = read_csv("D1.csv", header=0, index_col=0, skiprows=0)
@@ -56,48 +58,43 @@ lstm_model.add(LSTM(units, input_shape=(
 lstm_model.add(Dropout(0.1))
 lstm_model.add(Dense(1))
 lstm_model.compile(loss='mean_squared_error', optimizer='adam')
-history = lstm_model.fit(train_X_lstm, train_y, epochs=16, batch_size=24,
+history = lstm_model.fit(train_X_lstm, train_y, epochs=32, batch_size=24,
                          validation_data=(val_X_lstm, val_y))
 
-# Plot loss history
-# plt.plot(history.history['loss'], label='train_loss')
-# plt.plot(history.history['val_loss'], label='val_loss')
-# plt.legend()
-# plt.show()
 
 # Make predictions
 lstm_predict = lstm_model.predict(test_X_lstm, batch_size=24)
-svr_predict = svr.predict(test_X)
 lr_predict = lr.predict(test_X)
+svr_predict = svr.predict(test_X)
 
 
 # Generate & print metrics
-def root_mean_squared_error(y_true, y_pred):
-    return K.sqrt(K.mean(K.square(y_pred - y_true)))
-
-
 def generate_metrics(y_true, y_pred):
     return (
-        f"MAE: {mean_absolute_error(y_true, y_pred)}",
-        f"MSE: {mean_squared_error(y_true, y_pred)}",
-        f"RMSE: {root_mean_squared_error(y_true, y_pred)}"
-        f"R2: {r2_score(y_true, y_pred)}",
+        f"MAE: {round(mean_absolute_error(y_true, y_pred), 9)}",
+        f"MSE: {round(mean_squared_error(y_true, y_pred), 9)}",
+        f"RMSE: {round(sqrt(mean_squared_error(y_true, y_pred)), 9)}",
+        f"R2: {round(r2_score(y_true, y_pred), 9)}",
     )
 
 
 lstm_metrics = generate_metrics(test_y, lstm_predict)
-svr_metrics = generate_metrics(test_y, svr_predict)
 lr_metrics = generate_metrics(test_y, lr_predict)
+svr_metrics = generate_metrics(test_y, svr_predict)
 
-print("Metrics:")
+print("\nMetrics:")
 print(f"LSTM:\t{lstm_metrics}")
-print(f"SVR:\t{svr_metrics}")
 print(f"LR:\t{lr_metrics}")
+print(f"SVR:\t{svr_metrics}")
 
 # Plot actual and predictions
-# plt.plot(lstm_predict[:, -1], label='LSTM prediction')
-# plt.plot(svr_predict, label='SVR prediction')
-# plt.plot(lr_predict, label='LR prediction')
-# plt.plot(test_y, label='actual')
-# plt.legend()
-# plt.show()
+# Plot loss history
+fig, ax = plt.subplots(2)
+ax[0].plot(lstm_predict[:, -1], label='LSTM prediction')
+ax[0].plot(svr_predict, label='SVR prediction')
+ax[0].plot(lr_predict, label='LR prediction')
+ax[0].plot(test_y, label='actual')
+ax[1].plot(history.history['loss'], label='train_loss')
+ax[1].plot(history.history['val_loss'], label='val_loss')
+plt.legend()
+plt.show()
