@@ -62,6 +62,27 @@ A section of the processed dataset cat be seen below.
 
 The Long Short-Term Memory recurrent neural network (LSTM), Support Vector Regression (SVR) and Linear Regression (LR) models have been selected. These models and their strengsth and limitations are described in the following.
 
+### LR
+
+Linear Regression is, in short, an attempt to find a linear function that models some given data points best. 
+The model aims to predict a $y$ value such that the error difference between predicted value and true value is as small as possible, and does this by trying to reach the best value that minimizes the error between predicted $y$ value and true $y$ value. This is accomplished using a loss function, Root Mean Squared Error (or RMSE) between the predicted and actual values. Using Gradient Descent on the loss function, the optimal linear function is determined across the data points.   
+
+#### Algorithm
+
+#### Strength and Limitations
+
+Linear regression has poor outlier resistance. 
+
+### SVR
+
+The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ by a value no greater than $ε$ for each training point $x$ that at the same time is as flat as possible. The model achieves this by lifting the input into a space with higher dimensions with a non-linear mapping. A linear model is then constructed in the resulting space. The accuracy of the model depends on the mapping, called a kernel. The non-linearity of the kernel function allows non-linear regression, which Linear Regression does not. 
+
+#### Algorithm
+
+#### Strength and Limitations
+
+Accuracy depends on kernel function. 
+
 ### LSTM
 
 The Long short-term memory (LSTM) is an artificial recurrent neural network, (RNN) model. The model has "memory" due to having input, output and forget gates between the internal neural nodes. Using these gates, an individual node can "decide" to retain or forget information. The "vanishing gradient" problem seen in traditional RNNs, where gradients that are back-propagated can "vanish", can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though "exploding gradients" tending to infinity can still occur.
@@ -70,17 +91,8 @@ The Long short-term memory (LSTM) is an artificial recurrent neural network, (RN
 
 #### Strength and Limitations
 
-### SVR
-
-#### Algorithm
-
-#### Strength and Limitations
-
-### LR
-
-#### Algorithm
-
-#### Strength and Limitations
+The LSTM model is a "black box" and it can be hard to determine what features the model uses. 
+Training the LSTM model is computationally expensive.
 
 \newpage
 
@@ -137,15 +149,17 @@ The number of epochs when training the network had some significance, but had a 
 
 Experiments with adding and removing dropout in the network were also performed. The initial model had no dropout which made it prone to overfitting. A large dropout impacted the accuracy of the model negatively. Ultimately, a dropout of 10% was deemed optimal.
 
+Different kernels were used for the SVR model, with the Radial Basis Function (`rbf`) kernel function delivering the best performance. Refitting the SVR model with a different kernel function is low-cost which enabled fitting the model with all available kernel functions in order to determine the optimal function.
+
 #### Planning
 
 No explicit experimentation plan was detailed before the beginning of the project due to starting the project early. The tweaking of hyperparameters quickly turned out to produce a relatively accurate model, and training over higher levels of epochs could then be run in parallel with developing LR and SVR models.
 
-Experiments were carried out until the LSTM model was deemed to be "good enough" - that is better in most metrics than the other models developed.
+Experiments were carried out until the LSTM model was deemed to be "good enough" - that is better in most metrics than the other models developed. An Amazon EC2 instance was used temporarily for LSTM training in order to determine whether a higher number of epochs would yield better performance. This was deemed unnecessary due to the low model performance gain. 
 
 ### The Winner
 
-The winner - that is the model with the best performance - has been determined as the LSTM model. As noted in the earlier performance overview, the LSTM has a slightly better performance than the LR model.
+The winner - the model with the best performance - has been determined as the LSTM model. As noted in the earlier performance overview, the LSTM has a slightly better performance than the LR model.
 
 |      | MAE         | MSE         | RMSE        | $R^2$       | EV          |
 | ---- | ----------- | ----------- | ----------- | ----------- | ----------- |
