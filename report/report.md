@@ -117,8 +117,6 @@ At first glance the LR and LSTM model looks to have close to identical performan
 
 ### Experimentation
 
-Experimentation was performed over the course of the project in order to improve the model accuracy.
-
 #### Dataset Permutation
 
 The initial training was done with all original features present. This gave a very precise model, since the model merely had to learn how to "predict" the `Weighted_Price` from the `Open`, `High`, `Low` and `Close` features.
@@ -141,7 +139,7 @@ Experiments with adding and removing dropout in the network were also performed.
 
 #### Planning
 
-No explicit experimentation plan was detailed before the beginning of the project due to beginning the project relatively early. The tweaking of hyperparameters quickly turned out to produce a relatively accurate model, and training over higher levels of epochs could then be run in parallel with developing LR and SVR models.
+No explicit experimentation plan was detailed before the beginning of the project due to starting the project early. The tweaking of hyperparameters quickly turned out to produce a relatively accurate model, and training over higher levels of epochs could then be run in parallel with developing LR and SVR models.
 
 Experiments were carried out until the LSTM model was deemed to be "good enough" - that is better in most metrics than the other models developed.
 
