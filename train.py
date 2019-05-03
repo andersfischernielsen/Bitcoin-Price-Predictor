@@ -7,7 +7,7 @@ from pandas import concat
 from sklearn import preprocessing
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, explained_variance_score
 
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
@@ -24,8 +24,8 @@ values = values[:, 0:4:]
 # Split data into test, train and validation with validation as most recent data
 percent = int(values.shape[0]*0.01)
 train = values[:percent*66, :]
-val = values[percent*23:percent*89, :]
-test = values[percent*89:percent*100, :]
+val = values[percent*23:percent*90, :]
+test = values[percent*90:percent*100, :]
 
 # Split and scale data into train, val test sets
 scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
@@ -75,6 +75,7 @@ def generate_metrics(y_true, y_pred):
         f"MSE: {round(mean_squared_error(y_true, y_pred), 9)}",
         f"RMSE: {round(sqrt(mean_squared_error(y_true, y_pred)), 9)}",
         f"R2: {round(r2_score(y_true, y_pred), 9)}",
+        f"EV: {round(explained_variance_score(y_true, y_pred), 9)}"
     )
 
 
@@ -87,14 +88,14 @@ print(f"LSTM:\t{lstm_metrics}")
 print(f"LR:\t{lr_metrics}")
 print(f"SVR:\t{svr_metrics}")
 
-# Plot actual and predictions
-# Plot loss history
+# Plot actual and predictions, loss history
 fig, ax = plt.subplots(2)
 ax[0].plot(lstm_predict[:, -1], label='LSTM prediction')
 ax[0].plot(svr_predict, label='SVR prediction')
 ax[0].plot(lr_predict, label='LR prediction')
 ax[0].plot(test_y, label='actual')
+ax[0].legend(loc='upper right')
 ax[1].plot(history.history['loss'], label='train_loss')
 ax[1].plot(history.history['val_loss'], label='val_loss')
-plt.legend()
+ax[1].legend(loc='upper right')
 plt.show()
