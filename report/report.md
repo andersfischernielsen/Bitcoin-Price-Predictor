@@ -115,14 +115,49 @@ Plots of the predictions for the three models at two zoom levels can be seen bel
 The plots show that the SVR model does not perform as well as the LR and LSTM model.
 At first glance the LR and LSTM model looks to have close to identical performance, which the previously detailed performance metrics help show is not the case.
 
-### Cost of Experimentation
+### Experimentation
 
-In your experimental study you should run several different experiments that will consist of various combinations of algorithms, and pre-processing methods (e.g. different methods of feature selection, different combinations of parameter values). For example, if you experiment with a different algorithms, f different feature selection methods and p different sets of parameter values and b different boosting methods then you will run a total of t=a*f*p\*b different experiments. The number t can be quite large depending on your choice of a, f, p and b. Thus, as part of your report you will need to produce an experimental plan describing what strategy you used to keep the total number of experiments down to a manageable number whilst not sacrificing performance.
+Experimentation was performed over the course of the project in order to improve the model accuracy.
 
 #### Dataset Permutation
 
+The initial training was done with all original features present. This gave a very precise model, since the model merely had to learn how to "predict" the `Weighted_Price` from the `Open`, `High`, `Low` and `Close` features.
+
+The normalization was initally performed across the entire dataset before splitting into subsets. This made the problem "too easy" for the models, since all data values would match the other datasets. The decision to split before normalization made sure that there is no correlation between the normalized values between subsets.
+
+#### Hyperparameter tweaking
+
+The initial experimentation of this project was using different hyperparameters for the LSTM. The main hyperparameters that have been tweaked for the LSTM have been
+
+- `inputs` - the size (units) of the hidden layer
+- `epochs` - the anumber if training epochs
+- `batch_size` - the size of the amount of timesteps to take in per epoch
+
+The size of the hidden layer along with the number of epochs unexpectedly turned out to be the most important hyperparameters.
+The initial experiments were performed with a small hidden layer, due to training time. The computing power required to train a large network made it infeasible to experiment with the other hyperparameters when the network was large.
+The number of epochs when training the network had some significance, but had a smaller impact when the number of epochs exceeded 17. Batch size seemed to have little to no effect on the results and was furthermore difficult to change due to the requirements of the LSTM library that require input dimensions of the data to match the batch size.
+
+Experiments with adding and removing dropout in the network were also performed. The initial model had no dropout which made it prone to overfitting. A large dropout impacted the accuracy of the model negatively. Ultimately, a dropout of 10% was deemed optimal.
+
+#### Planning
+
+No explicit experimentation plan was detailed before the beginning of the project due to beginning the project relatively early. The tweaking of hyperparameters quickly turned out to produce a relatively accurate model, and training over higher levels of epochs could then be run in parallel with developing LR and SVR models.
+
+Experiments were carried out until the LSTM model was deemed to be "good enough" - that is better in most metrics than the other models developed.
+
 ### The Winner
 
-An analytical (this can include statistical methods) comparison of the performance of the algorithms, together with an explanation of the superior
-Page 2 of 8
-performance of the winner. You may use the Experimenter module in Weka for this purpose. Your analysis should also include suitable visualizations (model diagrams, PRC curves, whatever is appropriate) that compare the performances of your winner and runner-up algorithms. Your winner should then be compared to any significant (data mining) work previously undertaken on the data set you selected (if any). In your experimental study you will have defined a number of different performance measures and these measures should (a) be used on their own and (b) combined into a single measure. To combine several measures into one use a linear weighted model, with weights to be supplied by yourself, backed up by suitable justification.
+The winner - that is the model with the best performance - has been determined as the LSTM model. As noted in the earlier performance overview, the LSTM has a slightly better performance than the LR model.
+
+|      | MAE         | MSE         | RMSE        | $R^2$       | EV          |
+| ---- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| LSTM | 0.010710268 | 0.000207735 | 0.014413024 | 0.995107292 | 0.995156721 |
+| LR   | 0.011783905 | 0.000216703 | 0.014720851 | 0.994896068 | 0.996982989 |
+| SVR  | 0.022348931 | 0.000960744 | 0.030995877 | 0.977371961 | 0.983135368 |
+
+Given a scenario where computing power is not abundant, the LR model would be deemed the better model. The training and experimentation on the LSTM takes time, especially on older machines.
+
+The LR model is not far behind the LSTM model in regards to performance, but the SVR model is trailing behind.
+
+**TODO:**
+An analytical (this can include statistical methods) comparison of the performance of the algorithms, together with an explanation of the superior performance of the winner. You may use the Experimenter module in Weka for this purpose. Your analysis should also include suitable visualizations (model diagrams, PRC curves, whatever is appropriate) that compare the performances of your winner and runner-up algorithms. Your winner should then be compared to any significant (data mining) work previously undertaken on the data set you selected (if any). In your experimental study you will have defined a number of different performance measures and these measures should (a) be used on their own and (b) combined into a single measure. To combine several measures into one use a linear weighted model, with weights to be supplied by yourself, backed up by suitable justification.
