@@ -6,8 +6,9 @@ _Assignment 2 - COMP809_
 
 ## Purpose
 
-The purpose of this data mining project is to determine, given a dataset which tracks the movement of bitcoin over a period of time spanning close to a year a and half, whether it is possible to accurately predict the weighted price of bitcoin on an hourly basis.
-The prediction will be performed by developing three data mining models over the dataset and evaluating their performance by looking at regression metrics. Long Short-Term Memory recurrent neural network (LSTM), Linear Regression (LR) and Support Vector Regression models have been developed and evaluated in this project.
+The purpose of this data mining project is to determine, given a dataset tracking the movement of bitcoin over a period of time spanning close to a year a and half, whether it is possible to accurately predict the weighted price of Bitcoin (BTC) on an hourly basis.
+By developing three data mining models over the dataset and evaluating their performance by looking at regression metrics, predictions are found and their results can be compared.
+The three models that have been developed and evaluated in this project are a Long Short-Term Memory recurrent neural network (LSTM), a Linear Regression (LR) and a Support Vector Regression model.
 
 ## Data
 
@@ -23,9 +24,9 @@ The dataset shows the movement of bitcoin spanning over the time period from `01
 | 1/01/2017 11:00 | 962.93 | 964.18 | 962.01 | 963.58 | 174.8056494 | 168584.3686     | 963.265489     |
 | 1/01/2017 12:00 | 963.59 | 966.3  | 963.59 | 966.3  | 171.1138657 | 165313.3274     | 964.5229141    |
 
-Predicting the `Weighted_Price` feature is the goal of this project.
+The goal of this project is predicting the `Weighted_Price` feature given the remaining features.
 
-- `Timestamp` indicated the time of day the remaining features were extracted and represents a one-hour timestep.
+- `Timestamp` indicates the time of day the remaining features were extracted and represents a one-hour timestep.
 - `Open` is the opening price at the time of measurement.
 - `High` is the highest price observed in the one-hour timestep.
 - `Low` is the lowest price observed in the one-hour timestep.
@@ -33,19 +34,20 @@ Predicting the `Weighted_Price` feature is the goal of this project.
 - `Volume_BTC` is the volume of bitcoins present in the bitcoin network at the time of measurement.
 - `Volume_Currency` is the volume of actual currency (assumed to be USD) present at the time of measurement.
 
-The `High`, `Low` and `Close` features are unknown at the beginning of the one-hour timestep, and have been measured at the end of the timestep. The `Open` feature shows the `Close` feature of the previous timestep, since this known when the one-hour timestep measurement is initiated.
+The `High`, `Low` and `Close` features are unknown at the beginning of the one-hour timestep and are been measured at the end of the timestep. The `Open` feature shows the `Close` feature of the previous timestep since this is known when the one-hour timestep measurement is begun.
 
 ### Preprocessing
 
-Given the nature of the dataset, the `High`, `Low` and `Close` features cannot be used in practical prediction, since these are known "after-the-fact", that is in a realistic prediction setting, knowing what the highest, lowest and closing BTC values would make it trivial to predict the `Weighted_Price`. A more interesting scenario would be to predict the `Weighted_Price` for a given timestep only knowing the `Open`, `Volume_BTC` and `Volume_Currency` features available at the beginning of each timestep measurement.
+Given the nature of the dataset, the `High`, `Low` and `Close` features cannot be used in a practical prediction scenario, since these are known "after-the-fact", that is in a realistic prediction setting, knowing what the highest, lowest and closing BTC values would make it trivial to predict the `Weighted_Price`.
+A more interesting scenario would be to predict the `Weighted_Price` for a given timestep only knowing the `Open`, `Volume_BTC` and `Volume_Currency` features, that are known at the beginning of each timestep measurement.
 
-The `High`, `Low` and `Close` features have therefore been removed in preprocessing. The `Timestamp` feature has been transformed into simple timestep values from $[0...N]$ where $N = data samples = 10776$.
+The `High`, `Low` and `Close` features have therefore been removed during preprocessing. The `Timestamp` feature has been transformed into simple timestep values from $[0...N]$ where $N = \vert dataset \vert = 10776$.
 
 The dataset is split into training, testing and validation sets. The training dataset is the first 66% of the data samples according to timestamp, with the remaining 33% of the data samples being split into 23% test data for training and 10% validation data after training. The validation data set is used for generating regression metrics to estimate the performance of the generated models.
 
-The dataset is split into subsets according the the timestamps of the data samples in an attempt to "force" the models to get improved prediction accuracy on recent data. The validation data set represents the most recent data, and would therefore be more interesting in a real-world prediction scenario, where predicting historical data is of little value. A model that predict future values is desireable. Validating on recent data with values unknown to the models will therefore be "harder" for the models and represents a real-world prediction scenario. Validaing on these recent data samples should hopefully therefore better show the inaccuracies of the generated models.
+The dataset is split into subsets according the the timestamps of the data samples in an attempt to "force" the models to improve the prediction accuracy on recent data. The validation dataset consist of the most recent data points and would therefore be more interesting to predict in a real-world scenario, where predicting historical data that is already known is of little value. A model that predicts future values is therefore desireable. Validaing on these recent data samples should hopefully better show the shortcomings of the generated models.
 
-After splitting the dataset, each set has been normalized to values between 0 and 1. Normalisation has been performed after splitting in order to make sure there is no correlation between the values in the data sets in order to improve accuracy.
+After splitting the dataset, each set has been normalized to values between 0 and 1. Normalisation has been performed after splitting rather than before, in order to in order to improve accuracy and make sure there is no correlation between the values between the data sets.
 
 A section of the processed dataset cat be seen below.
 
@@ -64,24 +66,24 @@ The Long Short-Term Memory recurrent neural network (LSTM), Support Vector Regre
 
 ### LR
 
-Linear Regression is, in short, an attempt to find a linear function that models some given data points best. 
-The model aims to predict a $y$ value such that the error difference between predicted value and true value is as small as possible, and does this by trying to reach the best value that minimizes the error between predicted $y$ value and true $y$ value. This is accomplished using a loss function, Root Mean Squared Error (or RMSE) between the predicted and actual values. Using Gradient Descent on the loss function, the optimal linear function is determined across the data points.   
+Linear Regression is, in short, an attempt to find a linear function that models some given data points best.
+The model aims to predict a $y$ value such that the error difference between predicted value and true value is as small as possible, and does this by trying to reach the best value that minimizes the error between predicted $y$ value and true $y$ value. This is accomplished using a loss function, Root Mean Squared Error (or RMSE) between the predicted and actual values. Using Gradient Descent on the loss function, the optimal linear function is determined across the data points.
 
 #### Algorithm
 
 #### Strength and Limitations
 
-Linear regression has poor outlier resistance. 
+Linear regression has poor outlier resistance.
 
 ### SVR
 
-The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ by a value no greater than $ε$ for each training point $x$ that at the same time is as flat as possible. The model achieves this by lifting the input into a space with higher dimensions with a non-linear mapping. A linear model is then constructed in the resulting space. The accuracy of the model depends on the mapping, called a kernel. The non-linearity of the kernel function allows non-linear regression, which Linear Regression does not. 
+The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ by a value no greater than $\epsilon$ for each training point $x$ that at the same time is as flat as possible. Furthermore, the optimal function will be the function that has the maximum margin from the input data. The model achieves this by lifting the input into a space with higher dimensions with a non-linear mapping. A linear model is then constructed in the resulting space. The accuracy of the model depends on the mapping, called a kernel. The non-linearity of the kernel function allows non-linear regression, which Linear Regression does not.
 
 #### Algorithm
 
 #### Strength and Limitations
 
-Accuracy depends on kernel function. 
+Accuracy depends on kernel function.
 
 ### LSTM
 
@@ -91,14 +93,14 @@ The Long short-term memory (LSTM) is an artificial recurrent neural network, (RN
 
 #### Strength and Limitations
 
-The LSTM model is a "black box" and it can be hard to determine what features the model uses. 
+The LSTM model is a "black box" and it can be hard to determine what features the model uses.
 Training the LSTM model is computationally expensive.
 
 \newpage
 
 ## Performance of the Models
 
-The LSTM performs slightly better than LR with SVR in third place. The performance of the LR model is very close to the LSTM when looking at the evaluation metrics.
+The LSTM performs slightly better than LR with SVR in last place. The performance of the LR model is very close to the LSTM when looking at the evaluation metrics.
 
 The raw metrics after predicting the most recent 10% of the validation data set can be seen below.
 
@@ -124,8 +126,7 @@ Plots of the predictions for the three models at two zoom levels can be seen bel
 ![Plot 2](zoom-2.png 'Plot 2')
 ![Plot 3](zoom-3.png 'Plot 3')
 
-The plots show that the SVR model does not perform as well as the LR and LSTM model.
-At first glance the LR and LSTM model looks to have close to identical performance, which the previously detailed performance metrics help show is not the case.
+The plots show that the SVR model does not perform as well as the LR and LSTM model. At first glance the LR and LSTM model looks to have close to identical performance, which the previously detailed performance metrics help show is not the case.
 
 ### Experimentation
 
@@ -143,19 +144,21 @@ The initial experimentation of this project was using different hyperparameters 
 - `epochs` - the anumber if training epochs
 - `batch_size` - the size of the amount of timesteps to take in per epoch
 
-The size of the hidden layer along with the number of epochs unexpectedly turned out to be the most important hyperparameters.
+The size of the hidden layer along with the number of epochs unsurprisingly turned out to be the most important hyperparameters.
 The initial experiments were performed with a small hidden layer, due to training time. The computing power required to train a large network made it infeasible to experiment with the other hyperparameters when the network was large.
-The number of epochs when training the network had some significance, but had a smaller impact when the number of epochs exceeded 17. Batch size seemed to have little to no effect on the results and was furthermore difficult to change due to the requirements of the LSTM library that require input dimensions of the data to match the batch size.
+The number of epochs when training the network had some significance, but had a smaller impact when the number of epochs exceeded 30. Batch size seemed to have little to no effect on the results and was furthermore difficult to change due to the requirements of the LSTM library that require input dimensions of the data to match the batch size.
 
 Experiments with adding and removing dropout in the network were also performed. The initial model had no dropout which made it prone to overfitting. A large dropout impacted the accuracy of the model negatively. Ultimately, a dropout of 10% was deemed optimal.
 
-Different kernels were used for the SVR model, with the Radial Basis Function (`rbf`) kernel function delivering the best performance. Refitting the SVR model with a different kernel function is low-cost which enabled fitting the model with all available kernel functions in order to determine the optimal function.
+The size of the hidden layer was determined by using the formula $N_h = \frac{N_s} {(\alpha * (N_i + N_o))}$ where $N_i$ is the size of the input dimension (number of features), $N_o$ is the number of the output neurons (1), $N_s$ is the number of data points and finally $\alpha = 2$ as an arbitrary scaling factor.
+
+Different kernels were used for the SVR model, with the Radial Basis Function (RBF) kernel function giving the best performance. Refitting the SVR model with a different kernel function is low-cost, and therefore allowed fitting the model with all available kernel functions in order to determine the optimal function.
 
 #### Planning
 
 No explicit experimentation plan was detailed before the beginning of the project due to starting the project early. The tweaking of hyperparameters quickly turned out to produce a relatively accurate model, and training over higher levels of epochs could then be run in parallel with developing LR and SVR models.
 
-Experiments were carried out until the LSTM model was deemed to be "good enough" - that is better in most metrics than the other models developed. An Amazon EC2 instance was used temporarily for LSTM training in order to determine whether a higher number of epochs would yield better performance. This was deemed unnecessary due to the low model performance gain. 
+Experiments were carried out until the LSTM model was deemed to be "good enough" - that is better than the other models developed when looking at most performance metrics. An Amazon EC2 instance was used temporarily for LSTM training in order to determine whether a higher number of epochs would yield better performance. Raising the number of epochs was deemed unnecessary due to the low model performance gain.
 
 ### The Winner
 
@@ -167,9 +170,45 @@ The winner - the model with the best performance - has been determined as the LS
 | LR   | 0.011783905 | 0.000216703 | 0.014720851 | 0.994896068 | 0.996982989 |
 | SVR  | 0.022348931 | 0.000960744 | 0.030995877 | 0.977371961 | 0.983135368 |
 
-Given a scenario where computing power is not abundant, the LR model would be deemed the better model. The training and experimentation on the LSTM takes time, especially on older machines.
+(0,995107292 + 0,995156721) / 2 = 0,995132006
+(0,977371961 + 0,983135368) / 2 = 0,995939528
 
-The LR model is not far behind the LSTM model in regards to performance, but the SVR model is trailing behind.
+Given a scenario with a lack of computing power, the LR model would be the better model due to the lower computing requirements of fitting the model. The training and experimentation on the LSTM takes time, especially on slower CPUs or without available GPUs. The LR model is not far behind the LSTM model in regards to performance, with the SVR model trailing behind.
 
-**TODO:**
-An analytical (this can include statistical methods) comparison of the performance of the algorithms, together with an explanation of the superior performance of the winner. You may use the Experimenter module in Weka for this purpose. Your analysis should also include suitable visualizations (model diagrams, PRC curves, whatever is appropriate) that compare the performances of your winner and runner-up algorithms. Your winner should then be compared to any significant (data mining) work previously undertaken on the data set you selected (if any). In your experimental study you will have defined a number of different performance measures and these measures should (a) be used on their own and (b) combined into a single measure. To combine several measures into one use a linear weighted model, with weights to be supplied by yourself, backed up by suitable justification.
+Adding the three error metrics, $MAE + MSE + 2 * RMSE$ gives a weighted model that punishes poor outlier resistance, since the RMSE metric is sensitive to outliers. Due to the volatile nature of Bitcoin, developing a model that is able to predict sudden changes (outliers) is desirable.
+The average score of the R^2 and explained variance score is also worth looking at. For the LSTM and EV models, one models scores higher on $R^2$ while lower on the $EV$ score and vice versa. Averaging the two scores shows an overall performance metric for the precision.
+
+|      | $MAE + MSE + 2 * RMSE$ | $(R^2 + EV) / 2$ |
+| ---- | ---------------------- | ---------------- |
+| LSTM | 0.039744051            | 0.995132006      |
+| LR   | 0.04144231             | 0.995939528      |
+| SVR  | 0.085301429            | 0.980253664      |
+
+The weighted score shows that the LSTM outperforms the other models when looking at errors, but is slightly outperformed by the LR model when looking at the averaged $R^2$ and $EV$ score.
+
+The developed LSTM model seems to be slightly more outlier resistant than the LR model.
+Considering the performance of the LR model, and the cost of training the LSTM model, using the LR model for prototyping and gaining an understanding of the dataset is preferable.
+Training an LSTM model on powerful computing hardware in order to gain some precision compared to the LR model is optimal, but might not be feasible on older machines.
+
+[0]
+@article{doi:10.1080/13658810500286976,
+author = { C. J. Willmott and K. Matsuura },
+title = {On the use of dimensioned measures of error to evaluate the performance of spatial interpolators},
+journal = {International Journal of Geographical Information Science},
+volume = {20},
+number = {1},
+pages = {89-102},
+year = {2006},
+publisher = {Taylor & Francis},
+doi = {10.1080/13658810500286976},
+
+URL = {
+https://doi.org/10.1080/13658810500286976
+
+},
+eprint = {
+https://doi.org/10.1080/13658810500286976
+
+}
+
+}
