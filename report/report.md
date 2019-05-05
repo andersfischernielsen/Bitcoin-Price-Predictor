@@ -83,6 +83,7 @@ The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ b
 
 #### Strength and Limitations
 
+Resistant to overfitting.
 Accuracy depends on kernel function.
 
 ### LSTM
@@ -95,6 +96,7 @@ The Long short-term memory (LSTM) is an artificial recurrent neural network, (RN
 
 The LSTM model is a "black box" and it can be hard to determine what features the model uses.
 Training the LSTM model is computationally expensive.
+Can overfit.
 
 \newpage
 
