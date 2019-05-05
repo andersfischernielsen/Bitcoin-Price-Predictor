@@ -73,7 +73,7 @@ The model aims to predict a $y$ value such that the error difference between pre
 
 #### Strength and Limitations
 
-Linear regression has poor outlier resistance.
+Linear regression assumes that the data are independent. Linear regression has poor outlier resistance.
 
 ### SVR
 
@@ -170,12 +170,9 @@ The winner - the model with the best performance - has been determined as the LS
 | LR   | 0.011783905 | 0.000216703 | 0.014720851 | 0.994896068 | 0.996982989 |
 | SVR  | 0.022348931 | 0.000960744 | 0.030995877 | 0.977371961 | 0.983135368 |
 
-(0,995107292 + 0,995156721) / 2 = 0,995132006
-(0,977371961 + 0,983135368) / 2 = 0,995939528
-
 Given a scenario with a lack of computing power, the LR model would be the better model due to the lower computing requirements of fitting the model. The training and experimentation on the LSTM takes time, especially on slower CPUs or without available GPUs. The LR model is not far behind the LSTM model in regards to performance, with the SVR model trailing behind.
 
-Adding the three error metrics, $MAE + MSE + 2 * RMSE$ gives a weighted model that punishes poor outlier resistance, since the RMSE metric is sensitive to outliers. Due to the volatile nature of Bitcoin, developing a model that is able to predict sudden changes (outliers) is desirable.
+Adding the three error metrics, $MAE + MSE + 2 * RMSE$ gives a weighted model that punishes poor outlier resistance, since the RMSE metric is sensitive to outliers [@doi:10.1080/13658810500286976]. Due to the volatile nature of Bitcoin, developing a model that is able to predict sudden changes (outliers) is desirable.
 The average score of the R^2 and explained variance score is also worth looking at. For the LSTM and EV models, one models scores higher on $R^2$ while lower on the $EV$ score and vice versa. Averaging the two scores shows an overall performance metric for the precision.
 
 |      | $MAE + MSE + 2 * RMSE$ | $(R^2 + EV) / 2$ |
@@ -190,25 +187,6 @@ The developed LSTM model seems to be slightly more outlier resistant than the LR
 Considering the performance of the LR model, and the cost of training the LSTM model, using the LR model for prototyping and gaining an understanding of the dataset is preferable.
 Training an LSTM model on powerful computing hardware in order to gain some precision compared to the LR model is optimal, but might not be feasible on older machines.
 
-[0]
-@article{doi:10.1080/13658810500286976,
-author = { C. J. Willmott and K. Matsuura },
-title = {On the use of dimensioned measures of error to evaluate the performance of spatial interpolators},
-journal = {International Journal of Geographical Information Science},
-volume = {20},
-number = {1},
-pages = {89-102},
-year = {2006},
-publisher = {Taylor & Francis},
-doi = {10.1080/13658810500286976},
+\newpage
 
-URL = {
-https://doi.org/10.1080/13658810500286976
-
-},
-eprint = {
-https://doi.org/10.1080/13658810500286976
-
-}
-
-}
+# References
