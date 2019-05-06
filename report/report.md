@@ -191,6 +191,10 @@ The developed LSTM model seems to be slightly more outlier resistant than the LR
 Considering the performance of the LR model, and the cost of training the LSTM model, using the LR model for prototyping and gaining an understanding of the dataset is preferable.
 Training an LSTM model on powerful computing hardware in order to gain some precision compared to the LR model is optimal, but might not be feasible on older machines.
 
+### Previous Work
+
+Using recurrent neural networks on historic Bitcoin and stock market information has been explored previously as described in [@8374483], [@ebruseymakarakoyunaliosmancibikdiken2018], [@rafaelschultzekraft2018], [@sergioskaragiannakos2019], [@orhangaziyalçın2018] and [@brentb2018].
+
 \newpage
 
 # References
