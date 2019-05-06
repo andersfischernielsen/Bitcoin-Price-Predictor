@@ -73,7 +73,9 @@ The model aims to predict a $y$ value such that the error difference between pre
 
 #### Strength and Limitations
 
-Linear regression assumes that the data are independent. Linear regression has poor outlier resistance.
+Linear Regression can only model a linear function, which means that if future data can not be modelled linearly, the accuracy will drop. Compared to a neural network, the network would be able to model a nonlinear and more complex trend, which the regression model would not be able to.
+Linear regression assumes that the data are independent, which in this scenario might no be the case. The price for a given timestep probably has a correlation to the previous timestep and is therefore not independent. The Timestep measurements might differ greatly, but would probably still have a correlation.
+Linear regression has poor outlier resistance, since a single outlier can affect the resulting model significantly.
 
 ### SVR
 
@@ -84,7 +86,7 @@ The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ b
 #### Strength and Limitations
 
 Resistant to overfitting.
-Accuracy depends on kernel function.
+Accuracy depends on kernel function. Picking a good kernel function is hard, since it requires a good understanding of the input. The kernel function currently giving the best accuracy might not be well-suited for future data.
 
 ### LSTM
 
@@ -96,7 +98,7 @@ The Long short-term memory (LSTM) is an artificial recurrent neural network, (RN
 
 The LSTM model is a "black box" and it can be hard to determine what features the model uses.
 Training the LSTM model is computationally expensive.
-Can overfit.
+The exploding gradient problem is still present for LSTMs.
 
 \newpage
 
