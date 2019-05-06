@@ -154,7 +154,7 @@ The size of the hidden layer along with the number of epochs unsurprisingly turn
 The initial experiments were performed with a small hidden layer, due to training time. The computing power required to train a large network made it infeasible to experiment with the other hyperparameters when the network was large.
 The number of epochs when training the network had some significance, but had a smaller impact when the number of epochs exceeded 30. Batch size seemed to have little to no effect on the results and was furthermore difficult to change due to the requirements of the LSTM library that require input dimensions of the data to match the batch size.
 
-Experiments with adding and removing dropout in the network were also performed. The initial model had no dropout which made it prone to overfitting. A large dropout impacted the accuracy of the model negatively. Ultimately, a dropout of 10% was deemed optimal.
+Experiments with adding and removing dropout in the network were also performed. The initial model had no dropout which made it prone to overfitting. Dropout has been shown to prevent overfitting to a certain extent [@8374483], but a large dropout impacted the accuracy of the model negatively. Ultimately, a dropout of 10% was deemed optimal.
 
 The size of the hidden layer was determined by using the formula $N_h = \frac{N_s} {(\alpha * (N_i + N_o))}$ where $N_i$ is the size of the input dimension (number of features), $N_o$ is the number of the output neurons (1), $N_s$ is the number of data points and finally $\alpha = 2$ as an arbitrary scaling factor.
 
