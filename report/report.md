@@ -130,7 +130,9 @@ Plots of the predictions for the three models at two zoom levels can be seen bel
 ![Plot 2](zoom-2.png 'Plot 2')
 ![Plot 3](zoom-3.png 'Plot 3')
 
-The plots show that the SVR model does not perform as well as the LR and LSTM model. At first glance the LR and LSTM model looks to have close to identical performance, which the previously detailed performance metrics help show is not the case.
+The plots show that the SVR model does not perform as well as the LR and LSTM model. Experiments showed that the outlier resistance of the SVR model might prevent it from learning from the price spikes in the input data, since these could be seen as outliers. This is evident in the zoom above.
+
+At first glance the LR and LSTM model looks to have close to identical performance, which the previously detailed performance metrics help show is not the case, even though the models are close.
 
 ### Experimentation
 
@@ -156,7 +158,8 @@ Experiments with adding and removing dropout in the network were also performed.
 
 The size of the hidden layer was determined by using the formula $N_h = \frac{N_s} {(\alpha * (N_i + N_o))}$ where $N_i$ is the size of the input dimension (number of features), $N_o$ is the number of the output neurons (1), $N_s$ is the number of data points and finally $\alpha = 2$ as an arbitrary scaling factor.
 
-Different kernels were used for the SVR model, with the Radial Basis Function (RBF) kernel function giving the best performance. Refitting the SVR model with a different kernel function is low-cost, and therefore allowed fitting the model with all available kernel functions in order to determine the optimal function.
+Different kernels were used for the SVR model, with the Radial Basis Function (RBF) kernel function giving the best performance. Refitting the SVR model with a different kernel function is low-cost, and therefore allowed fitting the model with all available kernel functions in order to determine the optimal function. The $C$ parameter was also tuned in experiments, with
+small gains at the risk of overfitting.
 
 #### Planning
 
