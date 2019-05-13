@@ -1,6 +1,6 @@
 # Bitcoin Price Predictor
 
-This is a project in COMP809 at Auckland University of Technology attempting to predict bitcoin prices using machine learning.
+This is a project in COMP809 at Auckland University of Technology attempting to predict bitcoin prices using LR, SVR and a LSTM neural network.
 
 ## Purpose
 
