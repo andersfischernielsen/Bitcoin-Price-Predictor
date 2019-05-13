@@ -1,0 +1,1 @@
+pandoc --bibliography=bib.bib --csl=apa.csl -V geometry:margin=1.0in report.md -o report.pdf
