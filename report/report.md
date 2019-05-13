@@ -62,51 +62,41 @@ A section of the processed dataset cat be seen below.
 
 ## Chosen Algorithms
 
-The Long Short-Term Memory recurrent neural network (LSTM), Support Vector Regression (SVR) and Linear Regression (LR) models have been selected. These models and their strengsth and limitations are described in the following.
+The Long Short-Term Memory recurrent neural network (LSTM), Support Vector Regression (SVR) and Linear Regression (LR) models have been selected. These models and their strengths and limitations are described in the following.
 
 ### LR
 
-Linear Regression is, in short, an attempt to find a linear function that models some given data points best.
-The model aims to predict a $y$ value such that the error difference between predicted value and true value is as small as possible, and does this by trying to reach the best value that minimizes the error between predicted $y$ value and true $y$ value. This is accomplished using a loss function, Root Mean Squared Error (or RMSE) between the predicted and actual values. Using Gradient Descent on the loss function, the optimal linear function is determined across the data points.
-
-#### Algorithm
+Linear Regression is, in short, an attempt to find a linear function that models some given data points as accurately as possible.
+The model aims to predict a $y$ value such that the error difference between predicted value and true value is as small as possible, and does this by trying to reach the best value that minimizes the error between predicted $y$ value and true $y$ value. This is accomplished using a loss function, Root Mean Squared Error (or RMSE) between the predicted and actual values. Through the use of Gradient Descent on the loss function, the optimal linear function is determined across the data points.
 
 #### Strength and Limitations
 
 Linear Regression can only model a linear function, which means that if future data can not be modelled linearly, the accuracy will drop. Compared to a neural network, the network would be able to model a nonlinear and more complex trend, which the regression model would not be able to.
 Linear regression assumes that the data are independent, which in this scenario might no be the case. The price for a given timestep probably has a correlation to the previous timestep and is therefore not independent. The Timestep measurements might differ greatly, but would probably still have a correlation.
-Linear regression has poor outlier resistance, since a single outlier can affect the resulting model significantly.
+Linear regression also has poor outlier resistance, since a single outlier can affect the resulting model significantly.
 
 ### SVR
 
-The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ by a value no greater than $\epsilon$ for each training point $x$ that at the same time is as flat as possible. Furthermore, the optimal function will be the function that has the maximum margin from the input data. The model achieves this by lifting the input into a space with higher dimensions with a non-linear mapping. A linear model is then constructed in the resulting space. The accuracy of the model depends on the mapping, called a kernel. The non-linearity of the kernel function allows non-linear regression, which Linear Regression does not.
-
-#### Algorithm
+The goal of the SVR model is to find a function $f(x)$ that deviates from $yn$ by a value no greater than $\epsilon$ for each training point $x$ that at the same time is as flat as possible. Furthermore, the optimal function will be the function that has the maximum margin from the input data. The model achieves this by lifting the input into a space with higher dimensions with a non-linear mapping. A linear model is then constructed in the resulting space. The accuracy of the model depends on this mapping, called a kernel. The non-linearity of the kernel function allows non-linear regression, which Linear Regression would not.
 
 #### Strength and Limitations
 
-Resistant to overfitting.
-Accuracy depends on kernel function. Picking a good kernel function is hard, since it requires a good understanding of the input. The kernel function currently giving the best accuracy might not be well-suited for future data.
+The SVR model is resistant to overfitting, since the training takes place of "error points" outside of the margin of the currently found  function. SVR effectively ignores the data points that are far from the decision boundary of the function. 
+A limitation of the model is that the accuracy depends on kernel function. Picking a good kernel function is hard, since it requires a good understanding of the input. The default kernel function which currently gives the best accuracy might not be well-suited for future data, as seen in the following performance evaluation, where sudden changes in the dataset are not predicted accurately by the model.
 
 ### LSTM
 
-The Long short-term memory (LSTM) is an artificial recurrent neural network, (RNN) model. The model has "memory" due to having input, output and forget gates between the internal neural nodes. Using these gates, an individual node can "decide" to retain or forget information. The "vanishing gradient" problem seen in traditional RNNs, where gradients that are back-propagated can "vanish", can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though "exploding gradients" tending to infinity can still occur.
-
-#### Algorithm
+The Long short-term memory (LSTM) is an artificial recurrent neural network, (RNN) model. The model has "memory" due to having input, output and forget gates inside and between the internal neural nodes of the network. Using these gates an individual node can "decide" to retain or forget information. The "vanishing gradient" problem seen in traditional RNNs, where gradients that are back-propagated can "vanish" over large inputs can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though the inverse problem of "exploding gradients", where gradients are tending to infinity, can still occur.
 
 #### Strength and Limitations
 
-The LSTM model is a "black box" and it can be hard to determine what features the model uses.
-Training the LSTM model is computationally expensive.
-The exploding gradient problem is still present for LSTMs.
+One limitation of the LSTM model is that it is a "black box", meaning that the model can be hard to reason about after training, unlike a Descision Tree. It is therefore hard to e.g. see which features influence the prediction, and a trial-and-error aprroach where features are included and removed randomly has to be performed in the worst case. Training the LSTM model is furthermore computationally expensive, requiring a lot of either CPU of GPU power for training when trained using a high number of epochs or with very large datasets. As mentioned previously, the exploding gradient problem is still present for LSTMs, which can result in an unusable model if this is not caught during training.
 
 \newpage
 
 ## Performance of the Models
 
-The LSTM performs slightly better than LR with SVR in last place. The performance of the LR model is very close to the LSTM when looking at the evaluation metrics.
-
-The raw metrics after predicting the most recent 10% of the validation data set can be seen below.
+The LSTM performs slightly better than LR with SVR in last place. The performance of the LR model is very close to the LSTM when looking at the evaluation metrics. The raw metrics after predicting the most recent 10% of the validation data set can be seen below.
 
 |      | MAE         | MSE         | RMSE        | $R^2$       | EV          |
 | ---- | ----------- | ----------- | ----------- | ----------- | ----------- |
@@ -180,7 +170,7 @@ The winner - the model with the best performance - has been determined as the LS
 Given a scenario with a lack of computing power, the LR model would be the better model due to the lower computing requirements of fitting the model. The training and experimentation on the LSTM takes time, especially on slower CPUs or without available GPUs. The LR model is not far behind the LSTM model in regards to performance, with the SVR model trailing behind.
 
 Adding the three error metrics, $MAE + MSE + 2 * RMSE$ gives a weighted model that punishes poor outlier resistance, since the RMSE metric is sensitive to outliers [@doi:10.1080/13658810500286976]. Due to the volatile nature of Bitcoin, developing a model that is able to predict sudden changes (outliers) is desirable.
-The average score of the R^2 and explained variance score is also worth looking at. For the LSTM and EV models, one models scores higher on $R^2$ while lower on the $EV$ score and vice versa. Averaging the two scores shows an overall performance metric for the precision.
+The average score of the $R^2$ and explained variance score is also worth looking at. For the LSTM and EV models, one models scores higher on $R^2$ while lower on the $EV$ score and vice versa. Averaging the two scores shows an overall performance metric for the precision.
 
 |      | $MAE + MSE + 2 * RMSE$ | $(R^2 + EV) / 2$ |
 | ---- | ---------------------- | ---------------- |
@@ -196,7 +186,11 @@ Training an LSTM model on powerful computing hardware in order to gain some prec
 
 ### Previous Work
 
-Using recurrent neural networks on historic Bitcoin and stock market information has been explored previously as described in [@8374483], [@ebruseymakarakoyunaliosmancibikdiken2018], [@rafaelschultzekraft2018], [@sergioskaragiannakos2019], [@orhangaziyalçın2018] and [@brentb2018].
+Utilizing recurrent neural networks for predicting the price of Bitcoin or stocks using historic Bitcoin and stock market information has been explored previously as described by [@8374483], [@ebruseymakarakoyunaliosmancibikdiken2018], [@rafaelschultzekraft2018], [@sergioskaragiannakos2019], [@orhangaziyalçın2018] and [@brentb2018]. The work described in this report adds Dropout to the trained model, improving the performance of the model slightly comparatively.
+
+LSTMs have proven to be effective for predicting time-series data, though given less ressources simpler models predict with a comparable accuracy using less ressources for training.  
+
+The code for training the three models, the dataset and this report have been uploaded on GitHub in the reposity found at [https://github.com/andersfischernielsen/Bitcoin-Price-Predictor](https://github.com/andersfischernielsen/Bitcoin-Price-Predictor). 
 
 \newpage
 
