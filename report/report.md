@@ -86,7 +86,12 @@ A limitation of the model is that the accuracy depends on kernel function. Picki
 
 ### LSTM
 
-The Long short-term memory (LSTM) is an artificial recurrent neural network, (RNN) model. The model has "memory" due to having input, output and forget gates inside and between the internal neural nodes of the network. Using these gates an individual node can "decide" to retain or forget information. The "vanishing gradient" problem seen in traditional RNNs, where gradients that are back-propagated can "vanish" over large inputs can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though the inverse problem of "exploding gradients", where gradients are tending to infinity, can still occur.
+The Long short-term memory (LSTM) is an artificial recurrent neural network, (RNN) model. The model has "memory" due to having input, output and forget gates inside and between the internal neural nodes of the network. Using these gates an individual node can "decide" to retain or forget information. 
+
+![LSTM Cell](cell.png 'An LSTM cell') 
+[@chevalier]
+
+The "vanishing gradient" problem seen in traditional RNNs, where gradients that are back-propagated can "vanish" over large inputs can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though the inverse problem of "exploding gradients", where gradients are tending to infinity, can still occur.
 
 #### Strength and Limitations
 
