@@ -38,7 +38,7 @@ The `High`, `Low` and `Close` features are unknown at the beginning of the one-h
 
 ### Preprocessing
 
-Given the nature of the dataset, the `High`, `Low` and `Close` features cannot be used in a practical prediction scenario, since these are known "after-the-fact", that is in a realistic prediction setting, knowing what the highest, lowest and closing BTC values would make it trivial to predict the `Weighted_Price`.
+Given the nature of the dataset, the `High`, `Low` and `Close` features cannot be used in a practical prediction scenario, since these are known _after-the-fact_, that is in a realistic prediction setting, knowing what the highest, lowest and closing BTC values would make it trivial to predict the `Weighted_Price`.
 A more interesting scenario would be to predict the `Weighted_Price` for a given timestep only knowing the `Open`, `Volume_BTC` and `Volume_Currency` features, that are known at the beginning of each timestep measurement.
 
 The `High`, `Low` and `Close` features have therefore been removed during preprocessing. The `Timestamp` feature has been transformed into simple timestep values from $[0...N]$ where $N = \vert dataset \vert = 10776$.
@@ -91,11 +91,11 @@ The Long short-term memory (LSTM) is an artificial recurrent neural network, (RN
 ![LSTM Cell](cell.png 'An LSTM cell') 
 [@chevalier]
 
-The "vanishing gradient" problem seen in traditional RNNs, where gradients that are back-propagated can "vanish" over large inputs can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though the inverse problem of "exploding gradients", where gradients are tending to infinity, can still occur.
+The _vanishing gradient_ problem seen in traditional RNNs, where gradients that are back-propagated can vanish over large inputs, can be partially solved by an LSTM since it allows the gates allow the gradient to pass through unchanged, though the inverse problem of _exploding gradients_, where gradients are tending to infinity, can still occur.
 
 #### Strength and Limitations
 
-One limitation of the LSTM model is that it is a "black box", meaning that the model can be hard to reason about after training, unlike a Descision Tree. It is therefore hard to e.g. see which features influence the prediction, and a trial-and-error aprroach where features are included and removed randomly has to be performed in the worst case. Training the LSTM model is furthermore computationally expensive, requiring a lot of either CPU of GPU power for training when trained using a high number of epochs or with very large datasets. As mentioned previously, the exploding gradient problem is still present for LSTMs, which can result in an unusable model if this is not caught during training.
+One limitation of the LSTM model is that it is a black box, meaning that the model can be hard to reason about after training, unlike a Descision Tree. It is therefore hard to e.g. see which features influence the prediction, and a trial-and-error aprroach where features are included and removed randomly has to be performed in the worst case. Training the LSTM model is furthermore computationally expensive, requiring a lot of either CPU of GPU power for training when trained using a high number of epochs or with very large datasets. As mentioned previously, the exploding gradient problem is still present for LSTMs, which can result in an unusable model if this is not caught during training.
 
 \newpage
 
